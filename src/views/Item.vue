@@ -3,7 +3,8 @@
     <b-row>
       <b-col class="left">
         <section class="mb-4">
-          <b-card no-body class="maps-preview">
+          <b-card no-body class="maps-preview" ref="tabsContainer">
+            <FullscreenButton :element="() => $refs.tabsContainer" />
             <b-tabs v-model="tab" ref="tabs" card pills vertical end>
               <b-tab title="Map" no-body>
                 <Map :stac="data" :stacLayerData="selectedAsset" @mapClicked="mapClicked" @mapChanged="mapChanged" />
@@ -65,7 +66,8 @@ export default {
     Metadata,
     Providers: () => import('../components/Providers.vue'),
     ReadMore,
-    Thumbnails: () => import('../components/Thumbnails.vue')
+    Thumbnails: () => import('../components/Thumbnails.vue'),
+    FullscreenButton: () => import('../components/FullscreenButton.vue')
   },
   data() {
     return {
@@ -129,6 +131,18 @@ export default {
       @include media-breakpoint-up(xxxl) {
         column-count: 2;
       }
+    }
+  }
+
+  .fullscreen-button {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+  }
+
+  .fullscreen {
+    .previews, .map, .tabs, .tab-pane.active {
+      height: 100%;
     }
   }
 }
