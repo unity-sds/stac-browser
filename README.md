@@ -51,7 +51,7 @@ You can customize STAC Browser, too. See the options and theming details below. 
 
 ## Options
 
-All the following options can be used as explained in the chapter "Running", either through the [config file](config.js), as CLI Parameter or as environment variable (deprecated).
+All the following options can be used as explained in the chapter "Running", either through the [config file](config.js) or as CLI parameter.
 
 ### catalogUrl
 

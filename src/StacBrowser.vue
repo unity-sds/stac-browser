@@ -45,6 +45,11 @@ import StacHeader from './components/StacHeader.vue';
 import Utils from './utils';
 import URI from 'urijs';
 
+import STAC_BROWSER_VERSION from './version';
+
+Vue.use(Vuex);
+Vue.use(VueRouter);
+
 Vue.use(Clipboard);
 
 Vue.use(AlertPlugin);
@@ -60,26 +65,6 @@ Vue.use(SpinnerPlugin);
 Vue.directive('b-toggle', VBToggle);
 // Used to detect when a catalog/item becomes visible so that further data can be loaded
 Vue.directive('b-visible', VBVisible);
-
-let CONFIG;
-if (typeof CONFIG_PATH === 'undefined' && typeof CONFIG_CLI === 'undefined') {
-  CONFIG = require('../config');
-}
-else {
-  CONFIG = Object.assign(require(CONFIG_PATH), CONFIG_CLI);
-}
-
-// Setup store
-Vue.use(Vuex);
-const store = getStore(CONFIG);
-
-// Setup router
-Vue.use(VueRouter);
-const router = new VueRouter({
-  mode: CONFIG.historyMode,
-  base: CONFIG.pathPrefix,
-  routes: getRoutes(CONFIG)
-});
 
 // Pass Config through from props to vuex
 let Props = {};
@@ -100,8 +85,6 @@ for(let key in CONFIG) {
 
 export default {
   name: 'StacBrowser',
-  router,
-  store,
   components: {
     Authentication: () => import('./components/Authentication.vue'),
     ErrorAlert,
@@ -113,6 +96,7 @@ export default {
   },
   data() {
     return {
+      browserVersion: STAC_BROWSER_VERSION,
       error: null
     };
   },
@@ -120,14 +104,6 @@ export default {
     ...mapState(['title', 'doAuth', 'globalError', 'stateQueryParameters']),
     ...mapState({catalogUrlFromVueX: 'catalogUrl'}),
     ...mapGetters(['displayCatalogTitle']),
-    browserVersion() {
-      if (typeof STAC_STAC_BROWSER_VERSION !== 'undefined') {
-        return STAC_BROWSER_VERSION;
-      }
-      else {
-        return "";
-      }
-    },
     appStateAsParams () {
       const out = {};
       for (const [key, value] of Object.entries(this.$store.state.stateQueryParameters)) {
@@ -149,6 +125,14 @@ export default {
         this.$store.dispatch("load", { url, loadApi: true });
       }
     }
+  },
+  beforeCreate() {
+    this.$store = getStore(CONFIG);
+    this.$router = new VueRouter({
+      mode: CONFIG.historyMode,
+      base: CONFIG.pathPrefix,
+      routes: getRoutes(CONFIG)
+    });
   },
   created() {
     // The handling of unwatch and this.$watch sequence below explictly attaches the watcher

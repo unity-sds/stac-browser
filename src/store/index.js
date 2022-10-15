@@ -663,6 +663,7 @@ function getStore(config) {
       },
       async load(cx, args) {
         let {url, fromBrowser, show, loadApi, loadRoot} = args;
+        console.log(cx.state, args);
         let path;
         if (fromBrowser) {
           path = url.startsWith('/') ? url : '/' + url;
@@ -672,6 +673,7 @@ function getStore(config) {
           url = Utils.toAbsolute(url, cx.state.url);
           path = cx.getters.toBrowserPath(url);
         }
+        console.log(path, url);
 
         // Load the root catalog data if not available (e.g. after page refresh or external access)
         if (!loadRoot && path !== '/' && cx.state.catalogUrl && !cx.state.database[cx.state.catalogUrl]) {
