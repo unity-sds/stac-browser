@@ -20,7 +20,7 @@ import { mapGetters } from 'vuex';
 import StacFieldsMixin from './StacFieldsMixin';
 import ThumbnailCardMixin from './ThumbnailCardMixin';
 import StacLink from './StacLink.vue';
-import STAC from '../models/stac';
+import { CatalogLike } from 'stac-js';
 import { formatMediaType, formatTemporalExtent } from '@radiantearth/stac-fields/formatters';
 import Utils from '../utils';
 
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     load(visible) {
-      if (this.catalog instanceof STAC) {
+      if (this.catalog instanceof CatalogLike) {
         return;
       }
       this.$store.commit(visible ? 'queue' : 'unqueue', this.catalog.href);

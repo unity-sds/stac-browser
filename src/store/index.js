@@ -7,7 +7,8 @@ import URI from "urijs";
 import i18n from '../i18n';
 import { stacBrowserSpecialHandling } from "../rels";
 import Utils, { BrowserError } from '../utils';
-import STAC from '../models/stac';
+import { createSTAC, getDisplayTitle, addMissingChildren } from '../models/stac';
+import { STAC } from 'stac-js';
 
 import { addQueryIfNotExists, isAuthenticationError, Loading, processSTAC, proxyUrl, unproxyUrl, stacRequest } from './utils';
 import { getBest } from '../locale-id';
@@ -95,7 +96,7 @@ function getStore(config, router) {
         }
       },
 
-      displayCatalogTitle: (state, getters) => STAC.getDisplayTitle(getters.root, state.catalogTitle),
+      displayCatalogTitle: (state, getters) => getDisplayTitle(getters.root, state.catalogTitle),
 
       isCollection: state => state.data?.isCollection() || false,
       isCatalog: state => state.data?.isCatalog() || false,
@@ -216,7 +217,7 @@ function getStore(config, router) {
           catalogs = catalogs.concat(state.apiCollections);
         }
         if (hasChilds && showChilds) {
-          catalogs = STAC.addMissingChildren(catalogs, state.data);
+          catalogs = addMissingChildren(catalogs, state.data);
         }
         return catalogs;
       },
@@ -507,7 +508,7 @@ function getStore(config, router) {
           state.title = title;
         }
         else {
-          state.title = STAC.getDisplayTitle(state.data, state.catalogTitle);
+          state.title = getDisplayTitle(state.data, state.catalogTitle);
           if (state.data) {
             let description = state.data.getMetadata('description');
             if (Utils.hasText(description)) {
@@ -735,7 +736,7 @@ function getStore(config, router) {
             if (!Utils.isObject(response.data)) {
               throw new BrowserError(i18n.t('errors.invalidJsonObject'));
             }
-            data = new STAC(response.data, url, path);
+            data = createSTAC(response.data, url, path);
             if (show) {
               // If we prefer another language abort redirect to the new language
               let localeLink = data.getLocaleLink(cx.state.dataLanguage);
@@ -864,7 +865,7 @@ function getStore(config, router) {
                   return data;
                 }
                 else {
-                  data = new STAC(item, url, cx.getters.toBrowserPath(url));
+                  data = createSTAC(item, url, cx.getters.toBrowserPath(url));
                   data.markPotentiallyIncomplete();
                   cx.commit('loaded', { data, url });
                   return data;
@@ -923,7 +924,7 @@ function getStore(config, router) {
               return data;
             }
             else {
-              data = new STAC(collection, url, cx.getters.toBrowserPath(url));
+              data = createSTAC(collection, url, cx.getters.toBrowserPath(url));
               data.markPotentiallyIncomplete();
               cx.commit('loaded', { data, url });
               return data;

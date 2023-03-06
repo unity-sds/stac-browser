@@ -48,9 +48,10 @@ import { mapGetters, mapState } from "vuex";
 import Utils from '../utils';
 import SearchFilter from '../components/SearchFilter.vue';
 import Loading from '../components/Loading.vue';
-import STAC from '../models/stac';
+import { CatalogLike, STAC } from 'stac-js';
 import { BTabs, BTab } from 'bootstrap-vue';
 import { stacRequest } from '../store/utils';
+import { createSTAC, getDisplayTitle } from "../models/stac";
 
 export default {
   name: "Search",
@@ -87,7 +88,7 @@ export default {
     ...mapState(['catalogUrl', 'catalogTitle', 'itemsPerPage']),
     ...mapGetters(['canSearch', 'canSearchItems', 'canSearchCollections', 'getStac', 'root', 'collectionLink', 'parentLink', 'fromBrowserPath', 'toBrowserPath']),
     stac() {
-      if (this.parent instanceof STAC) {
+      if (this.parent instanceof CatalogLike) {
         return this.parent;
       }
       return null;
@@ -96,10 +97,10 @@ export default {
       return this.isCollectionSearch ? this.collectionSearchLink : this.itemSearchLink;
     },
     collectionSearchLink() {
-      return this.parent instanceof STAC && this.parent.getApiCollectionsLink();
+      return this.parent instanceof CatalogLike && this.parent.getApiCollectionsLink();
     },
     itemSearchLink() {
-      return this.parent instanceof STAC && this.parent.getSearchLink();
+      return this.parent instanceof CatalogLike && this.parent.getSearchLink();
     },
     itemCollection() {
       if (this.isCollectionSearch) {
@@ -131,7 +132,7 @@ export default {
             if (selfLink?.href) {
               url = Utils.toAbsolute(selfLink.href, this.link.href);
             }
-            return new STAC(obj, url, this.toBrowserPath(url));
+            return createSTAC(obj, url, this.toBrowserPath(url));
           } catch (error) {
             console.error(error);
             return null;
@@ -152,7 +153,7 @@ export default {
       return this.canSearchCollections && this.activeSearch === 0;
     },
     pageDescription() {
-      let title = STAC.getDisplayTitle([this.collectionLink, this.parentLink, this.root], this.catalogTitle);
+      let title = getDisplayTitle([this.collectionLink, this.parentLink, this.root], this.catalogTitle);
       return this.$t('search.metaDescription', {title});
     }
   },

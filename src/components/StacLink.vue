@@ -11,7 +11,8 @@
 import { mapState, mapGetters } from 'vuex';
 import { stacBrowserNavigatesTo } from "../rels";
 import Utils from '../utils';
-import STAC from '../models/stac';
+import { STAC } from 'stac-js';
+import { getDisplayTitle } from '../models/stac';
 import URI from 'urijs';
 
 export default {
@@ -133,7 +134,7 @@ export default {
       }
 
       let fallback = typeof this.fallbackTitle === 'function' ? this.fallbackTitle() : this.fallbackTitle;
-      return STAC.getDisplayTitle(this.data, fallback);
+      return getDisplayTitle(this.data, fallback);
     }
   },
   methods: {

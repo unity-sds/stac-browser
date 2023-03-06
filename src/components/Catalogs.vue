@@ -27,7 +27,8 @@
 import { mapGetters, mapState } from 'vuex';
 import Catalog from './Catalog.vue';
 import Loading from './Loading.vue';
-import STAC from '../models/stac';
+import { CatalogLike } from 'stac-js';
+import { getDisplayTitle } from '../models/stac';
 import ViewMixin from './ViewMixin';
 import Utils from '../utils';
 
@@ -101,7 +102,7 @@ export default {
       if (this.searchTerm) {
         catalogs = catalogs.filter(catalog => {
           let haystack = [ catalog.title ];
-          if (catalog instanceof STAC) {
+          if (catalog instanceof CatalogLike) {
             haystack.push(catalog.id);
             if (Array.isArray(catalog.keywords)) {
               haystack = haystack.concat(catalog.keywords);
@@ -115,7 +116,7 @@ export default {
       }
       // Sort
       if (!this.hasMore && this.sort !== 0) {
-        catalogs = catalogs.slice(0).sort((a,b) => STAC.getDisplayTitle(a).localeCompare(STAC.getDisplayTitle(b), this.uiLanguage));
+        catalogs = catalogs.slice(0).sort((a,b) => getDisplayTitle(a).localeCompare(getDisplayTitle(b), this.uiLanguage));
         if (this.sort === -1) {
           catalogs = catalogs.reverse();
         }

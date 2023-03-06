@@ -1,5 +1,6 @@
+import { Link, CatalogLike, Item, STAC } from 'stac-js';
+import { getDisplayTitle } from './models/stac';
 import Utils from './utils';
-import STAC from './models/stac';
 import URI from 'urijs';
 import i18n from './i18n';
 
@@ -50,8 +51,8 @@ function makeAssets(data) {
 function makeLinks(links, data, store, type = "DataCatalog") {
   return links.map(link => {
     let name, isBasedOn;
-    if (link instanceof STAC) {
-      name = STAC.getDisplayTitle(link);
+    if (link instanceof Link) {
+      name = getDisplayTitle(link);
       isBasedOn = link.getAbsoluteUrl();
     }
     else {
@@ -100,7 +101,7 @@ function fallbackDescription(data, store) {
 }
 
 function createBaseSchema(data, type, store) {
-  let name = STAC.getDisplayTitle(data);
+  let name = getDisplayTitle(data);
   let stacUrl = data.getAbsoluteUrl();
   let url = toBrowserUrl(stacUrl, store);
   let inLanguage = data.getMetadata('language')?.code;
@@ -159,7 +160,7 @@ function createBaseSchema(data, type, store) {
 }
 
 export function createCatalogSchema(data, parents, store) {
-  if (!(data instanceof STAC)) {
+  if (!(data instanceof CatalogLike)) {
     return null;
   }
   // Remove invalid links
@@ -190,7 +191,7 @@ export function createCatalogSchema(data, parents, store) {
 }
 
 export function createItemSchema(data, parents, store) {
-  if (!(data instanceof STAC)) {
+  if (!(data instanceof Item)) {
     return null;
   }
   parents = parents.filter(link => Utils.isObject(link));

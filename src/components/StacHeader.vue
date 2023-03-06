@@ -44,7 +44,8 @@ import { mapState, mapGetters } from 'vuex';
 import StacLink from './StacLink.vue';
 import { BIconArrow90degUp, BIconBook, BIconFolderSymlink, BIconSearch, BIconLock, BIconUnlock } from "bootstrap-vue";
 import Source from './Source.vue';
-import STAC from '../models/stac';
+import { STAC, CatalogLike } from 'stac-js';
+import { getDisplayTitle } from '../models/stac';
 import Utils from '../utils';
 
 export default {
@@ -95,7 +96,7 @@ export default {
         return null;
       }
       let dataLink;
-      if (this.data instanceof STAC && !this.data.equals(this.root)) {
+      if (this.data instanceof CatalogLike && !this.data.equals(this.root)) {
         dataLink = this.data.getSearchLink();
       }
       if (dataLink) {
@@ -119,7 +120,7 @@ export default {
           return {
             href: this.root.getAbsoluteUrl(),
             rel: 'root',
-            title: STAC.getDisplayTitle(this.root)
+            title: getDisplayTitle(this.root)
           };
         }
       }

@@ -38,9 +38,9 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import ErrorAlert from './components/ErrorAlert.vue';
 import StacHeader from './components/StacHeader.vue';
 
-import STAC from './models/stac';
 import Utils from './utils';
 import URI from 'urijs';
+import { STAC } from 'stac-js';
 
 import I18N from '@radiantearth/stac-fields/I18N';
 import { translateFields, API_LANGUAGE_CONFORMANCE, loadMessages } from './i18n';

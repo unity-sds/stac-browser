@@ -25,7 +25,7 @@
 import { mapGetters } from 'vuex';
 import ThumbnailCardMixin from './ThumbnailCardMixin';
 import StacLink from './StacLink.vue';
-import STAC from '../models/stac';
+import { Item } from 'stac-js';
 import { formatTemporalExtent, formatTimestamp, formatMediaType } from '@radiantearth/stac-fields/formatters';
 import Registry from '@radiantearth/stac-fields/registry';
 import Utils from '../utils';
@@ -70,15 +70,15 @@ export default {
       return [];
     },
     isDeprecated() {
-      return this.data instanceof STAC && Boolean(this.data.properties.deprecated);
+      return this.data instanceof Item && Boolean(this.data.properties.deprecated);
     },
     hasDescription() {
-      return this.data instanceof STAC && Utils.hasText(this.data.properties.description);
+      return this.data instanceof Item && Utils.hasText(this.data.properties.description);
     }
   },
   methods: {
     load(visible) {
-      if (this.item instanceof STAC) {
+      if (this.item instanceof Item) {
         return;
       }
       this.$store.commit(visible ? 'queue' : 'unqueue', this.item.href);

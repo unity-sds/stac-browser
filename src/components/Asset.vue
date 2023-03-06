@@ -49,7 +49,7 @@ import { BCollapse, BIconBoxArrowUpRight, BIconCheck, BIconChevronRight, BIconCh
 import { formatMediaType } from '@radiantearth/stac-fields/formatters';
 import { mapGetters, mapState } from 'vuex';
 import Description from './Description.vue';
-import STAC from '../models/stac';
+import { STAC } from 'stac-js';
 import Utils, { browserProtocols, imageMediaTypes, mapMediaTypes } from '../utils';
 import StacFieldsMixin from './StacFieldsMixin';
 

@@ -42,7 +42,7 @@ import Loading from './Loading.vue';
 import Pagination from './Pagination.vue';
 import { BCollapse, BIconSearch } from "bootstrap-vue";
 import Utils from '../utils';
-import STAC from '../models/stac';
+import { getDisplayTitle } from '../models/stac';
 import { mapState } from 'vuex';
 
 export default {
@@ -108,7 +108,7 @@ export default {
     chunkedItems() {
       let items = this.items;
       if (this.sort !== 0) {
-        items = items.slice(0).sort((a,b) => STAC.getDisplayTitle(a).localeCompare(STAC.getDisplayTitle(b), this.uiLanguage));
+        items = items.slice(0).sort((a,b) => getDisplayTitle(a).localeCompare(getDisplayTitle(b), this.uiLanguage));
         if (this.sort === -1) {
           items = items.reverse();
         }

@@ -37,7 +37,7 @@ import LControlFullscreen from 'vue2-leaflet-fullscreen';
 import Utils, { geojsonMediaType } from '../utils';
 import './map/leaflet-areaselect';
 import { mapGetters, mapState } from 'vuex';
-import STAC from '../models/stac';
+import { STAC } from 'stac-js';
 import { object as formatObject, string as formatString } from '@radiantearth/stac-fields/datatypes';
 import { BPopover } from 'bootstrap-vue';
 import getBasemaps from '../../basemaps.config';
