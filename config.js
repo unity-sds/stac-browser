@@ -40,5 +40,10 @@ module.exports = {
     requestHeaders: {},
     requestQueryParameters: {},
     preprocessSTAC: null,
-    authConfig: null
+    authConfig: {
+      type: 'header',
+      key: 'Authorization',
+      formatter: token => `Bearer ${token}`, // This is an example, there's also the simpler variant to just provide the string 'Bearer' in this case
+      description: `Please retrieve the token from our [API console](https://example.com/api-console).\n\nFor further questions contact <mailto:support@example.com>.`
+    }
 };

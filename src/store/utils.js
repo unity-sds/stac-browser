@@ -14,6 +14,7 @@ export class Loading {
 export async function stacRequest(cx, link) {
   let opts;
   let headers = {
+    // 'Access-Control-Allow-Origin': '*',
     'Accept-Language': cx.getters.acceptedLanguages
   };
   if (Utils.isObject(link)) {
