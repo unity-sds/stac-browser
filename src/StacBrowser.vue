@@ -34,7 +34,7 @@ import {
   VBToggle, VBVisible } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-
+import cookie from 'cookie';
 import ErrorAlert from './components/ErrorAlert.vue';
 import StacHeader from './components/StacHeader.vue';
 
@@ -261,6 +261,12 @@ export default {
       if (data instanceof STAC) {
         this.onDataLoaded();
       }
+    },
+  },
+  beforeCreate() {
+    const cookies = cookie.parse(document.cookie);
+    if (cookies['unity_token'] !== undefined) {
+      this.$store.dispatch('setAuth', cookies['unity_token']);
     }
   },
   created() {
