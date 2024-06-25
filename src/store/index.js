@@ -42,6 +42,7 @@ function getStore(config, router) {
     queue: [],
     privateQueryParameters: {},
     authData: null,
+    // catalogUrlData: null,  // cannot set this as setting it would overwrite the actual value which is added "beforeCreate"
     doAuth: [],
     conformsTo: [],
     dataLanguage: null,
@@ -432,6 +433,9 @@ function getStore(config, router) {
       setAuthData(state, value) {
         state.authData = value;
       },
+      setCatalogUrlData(state, value) {
+        state.catalogUrlData = value;
+      },
       openCollapsible(state, { type, uid }) {
         const idx = state.stateQueryParameters[type].indexOf(uid);
         // need to prevent duplicates because of the way the collapse v-model works
@@ -633,6 +637,12 @@ function getStore(config, router) {
 
         cx.commit('languages', {dataLanguage, uiLanguage});
         cx.commit('setQueryParameter', { type: 'state', key: 'language', value: locale });
+      },
+      async setCatalogUrl(cx, value) {
+        if (!Utils.hasText(value)) {
+          value = null;
+        }
+        cx.commit('setCatalogUrlData', value);
       },
       async setAuth(cx, value) {
         if (!Utils.hasText(value)) {

@@ -268,6 +268,7 @@ export default {
     if (cookies['unity_token'] !== undefined) {
       this.$store.dispatch('setAuth', cookies['unity_token']);
     }
+    this.$store.dispatch('setCatalogUrl', 'https://d3vc8w9zcq658.cloudfront.net/data/misc/catalog_list/')
   },
   created() {
     this.$router.onReady(() => {
