@@ -265,10 +265,22 @@ export default {
   },
   beforeCreate() {
     const cookies = cookie.parse(document.cookie);
+    let MAIN_SETTING = 'SETTING_PLACEHOLDER'
+    console.log(`MAIN_SETTING: ${JSON.stringify(MAIN_SETTING)}`)
+    if (typeof MAIN_SETTING === 'object' && MAIN_SETTING.constructor === Object) {
+      if (MAIN_SETTING['catalogUrl'] === undefined) {
+        MAIN_SETTING['catalogUrl'] = null
+      }
+    } else {
+      MAIN_SETTING = {
+        'catalogUrl': null,
+      }
+    }
+    console.log(`MAIN_SETTING: ${JSON.stringify(MAIN_SETTING)}`)
+    this.$store.dispatch('setCatalogUrl', MAIN_SETTING['catalogUrl'])
     if (cookies['unity_token'] !== undefined) {
       this.$store.dispatch('setAuth', cookies['unity_token']);
     }
-    this.$store.dispatch('setCatalogUrl', 'https://d3vc8w9zcq658.cloudfront.net/data/misc/catalog_list/')
   },
   created() {
     this.$router.onReady(() => {
