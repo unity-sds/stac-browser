@@ -278,8 +278,15 @@ export default {
     }
     console.log(`MAIN_SETTING: ${JSON.stringify(MAIN_SETTING)}`)
     this.$store.dispatch('setCatalogUrl', MAIN_SETTING['catalogUrl'])
+    let unity_token = undefined
     if (cookies['unity_token'] !== undefined) {
-      this.$store.dispatch('setAuth', cookies['unity_token']);
+      unity_token = cookies['unity_token']
+    }
+    if (cookies['oidc_access_token'] !== undefined && unity_token === undefined) {
+      unity_token = cookies['oidc_access_token']
+    }
+    if (unity_token !== undefined) {
+      this.$store.dispatch('setAuth', unity_token);
     }
   },
   created() {
