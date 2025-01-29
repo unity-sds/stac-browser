@@ -266,7 +266,6 @@ export default {
   beforeCreate() {
     const cookies = cookie.parse(document.cookie);
     let MAIN_SETTING = 'SETTING_PLACEHOLDER'
-    console.log(`MAIN_SETTING: ${JSON.stringify(MAIN_SETTING)}`)
     if (typeof MAIN_SETTING === 'object' && MAIN_SETTING.constructor === Object) {
       if (MAIN_SETTING['catalogUrl'] === undefined) {
         MAIN_SETTING['catalogUrl'] = null
