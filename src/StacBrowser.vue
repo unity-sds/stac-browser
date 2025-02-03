@@ -266,7 +266,6 @@ export default {
   beforeCreate() {
     const cookies = cookie.parse(document.cookie);
     let MAIN_SETTING = 'SETTING_PLACEHOLDER'
-    console.log(`MAIN_SETTING: ${JSON.stringify(MAIN_SETTING)}`)
     if (typeof MAIN_SETTING === 'object' && MAIN_SETTING.constructor === Object) {
       if (MAIN_SETTING['catalogUrl'] === undefined) {
         MAIN_SETTING['catalogUrl'] = null
@@ -278,8 +277,15 @@ export default {
     }
     console.log(`MAIN_SETTING: ${JSON.stringify(MAIN_SETTING)}`)
     this.$store.dispatch('setCatalogUrl', MAIN_SETTING['catalogUrl'])
+    let unity_token = undefined
     if (cookies['unity_token'] !== undefined) {
-      this.$store.dispatch('setAuth', cookies['unity_token']);
+      unity_token = cookies['unity_token']
+    }
+    if (cookies['oidc_access_token'] !== undefined && unity_token === undefined) {
+      unity_token = cookies['oidc_access_token']
+    }
+    if (unity_token !== undefined) {
+      this.$store.dispatch('setAuth', unity_token);
     }
   },
   created() {
